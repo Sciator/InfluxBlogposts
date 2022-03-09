@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "skipLibCheck": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "noEmit": true
+  },
+  "include": [
+    "src"
+  ]
+}
