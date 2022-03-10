@@ -146,6 +146,8 @@ INFLUX_BUCKET=
 
 ## Code
 
+### Load environment values
+
 now we can create `index.ts` inside `src` directory and start adding code.
 
 import and ensure all reuquired properties are set and create Influxdb object
@@ -163,6 +165,8 @@ if (!INFLUX_URL || !INFLUX_TOKEN || !INFLUX_ORG || !INFLUX_BUCKET) {
 
 const db = new InfluxDB({ token: INFLUX_TOKEN, url: INFLUX_URL });
 ```
+
+### Creating point
 
 Each point consists of measurement, tags, fields and timestamp
 measurement is used for...
@@ -185,6 +189,7 @@ console.log(point1.toLineProtocol())
 
 *Line protocol is string representation of point. [More in docs](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/)*
 
+### Write
 
 To write first point we need to initialize write api
 ```
@@ -236,6 +241,8 @@ writeApi.writePoint(point1);
 writeApi.close();
 ```
 </details>
+
+### Query
 
 Now we can open ui and create query so we can see if we were successfull with our effort. 
 
