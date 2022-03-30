@@ -1,22 +1,17 @@
 # TODOS
 
-create tsconfig.json ?
 best practices for API Tokens ?
 Possible errors notes same as in iot center workshop
-
-more abstract (how points looks etc.)
+add abstract in Creating point fill measurement, field... definitionions
 
 create repozitory with docker-compose and corresponding .ENV which can be started without any modifications
 
-Query parameters more complex example?, documentation for flux... functions
+missing documentation for flux... taged template functions ?
 
 everything will be online on github for easier testing troubleshooting
-Explain point structure
-Important query notes rename to something more accurate for this topic, but keep name that will stand out so nobody will skip this important topic.
 
 dead link https://github.com/influxdata/influxdb-client-js/blob/7fc386c59e718dfb452fad915ff3cd561b697536/packages/core/src/query/flux.ts#L42
 
-find reasonable usage for [queryRows](https://github.com/influxdata/influxdb-client-js/blob/master/examples/query.ts) add after Query parameters 
 
 # setup influxdb
 
@@ -54,8 +49,6 @@ services:
     command: influxd --reporting-disabled
 ```
 </details>
-
-
 
 and call `docker-compose up -d`
 
@@ -95,19 +88,21 @@ There are many [influxdb clients](https://docs.influxdata.com/influxdb/v1.8/tool
 
 TODO: blogpost for other libraries here
 
-# Javsript client examples
+# Javasript client examples
 
 ## preparing js environment
 
-prerequizites
-  [node.js](https://nodejs.org/en/)
-  yarn (with `npm install -g yarn` if npm installed)
+Prerequizites
+  - [node.js](https://nodejs.org/en/)
+  - yarn (with `npm install -g yarn` if npm installed)
 
+Try in command line to ensure installed properly `node -v` and `yarn -v`
 
-create package.json
-
+Create `package.json` and call
+```
 yarn add @influxdata/influxdb-client
 yarn add -D ts-node typescript @types/node dotenv
+```
 
 add 
 ```json
@@ -136,10 +131,25 @@ add
 ```
 </details>
 
+Create `tsconfig.json` and copy there 
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "strict": true,
+    "moduleResolution": "node",
+    "noEmit": true
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
 
 Now we have prepared our influxdb bucket, and API Token. It's also good to have ui opened so we can explore data there too.
 
-create .ENV file and fill up your information in it. 
+Create .ENV file and fill up your information in it. 
 ```
 INFLUX_URL=
 INFLUX_TOKEN=
@@ -155,9 +165,9 @@ INFLUX_BUCKET=
 
 ### Load environment values
 
-now we can create `index.ts` inside `src` directory and start adding code.
+Now we can create `index.ts` inside `src` directory and start adding code.
 
-import and ensure all reuquired properties are set and create Influxdb object
+Import and ensure all reuquired properties are set and create Influxdb object
 
 ```ts
 import 'dotenv/config';
@@ -202,7 +212,7 @@ To write first point we need to initialize write api
 ```ts
 const writeApi = db.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns');
 ```
-*in this example we will use **ns** precision of unix like timestamp*
+*in this example we will use **ns** precision of unix timestamp*
 
 Now when we have data and writeApi ready we can finaly write into influxdb
 
@@ -210,7 +220,7 @@ Now when we have data and writeApi ready we can finaly write into influxdb
 writeApi.writePoint(point1)
 ```
 
-this code won't necessary writes imidiately point into influxdb and if we want to ensure write was done we need to flush endpoint with `writeApi.flush();`
+This code won't necessary writes imidiately point into influxdb and if we want to ensure write was done we need to flush endpoint with `writeApi.flush();`
 
 But for now we are done with writing points so we can close connection which also flushes existing write queue.
 
@@ -402,7 +412,7 @@ import {
 const start = '-10m'
 const queryParametrized = flux`
   from(bucket: "my-buck")
-    |> range(start: ${fluxDuration(startString)})
+    |> range(start: ${fluxDuration(start)})
     |> filter(fn: (r) => r["_measurement"] == "temperature")
     |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
 `
